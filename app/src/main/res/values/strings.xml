@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">GoogleGroupDictator</string>
+    <string name="feed_conf_title">Google Groups Feed Details</string>
+    <string name="feed_conf_feed_name">Provide Google Group Name</string>
+    <string name="feed_conf_feed_rwby">Group Name</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
+    <string name="settings">Config</string>
+    <string name="speak">Dictate</string>
+    <string name="play">Play</string>
+    <string name="pause">Pause</string>
+</resources>
