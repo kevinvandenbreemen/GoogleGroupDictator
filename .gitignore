@@ -1,4 +1,8 @@
+gradlew
+gradlew.bat
+gradle
 *.iml
+.idea
 .gradle
 /local.properties
 /.idea/workspace.xml
