@@ -119,6 +119,7 @@ public class DictationFragment extends Fragment implements DictationView{
 
     @Override
     public void onDone() {
+        this.seekBar.setOnSeekBarChangeListener(null);
         this.controller = null;
         this.listener.onCloseDictation();
     }

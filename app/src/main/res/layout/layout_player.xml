@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorBackground"
     android:layout_width="match_parent"
     android:layout_height="200dp">
 
@@ -20,6 +21,7 @@
 
     <Button
         android:id="@+id/playButton"
+        style="@style/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -36,6 +38,7 @@
     <Button
         android:id="@+id/pauseButton"
         android:layout_width="wrap_content"
+        style="@style/button"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
@@ -46,6 +49,7 @@
 
     <Button
         android:id="@+id/closeButton"
+        style="@style/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"

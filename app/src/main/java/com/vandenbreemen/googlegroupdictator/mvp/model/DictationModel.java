@@ -1,6 +1,7 @@
 package com.vandenbreemen.googlegroupdictator.mvp.model;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.vandenbreemen.googlegroupdictator.post.api.Post;
 import com.vandenbreemen.googlegroupdictator.svc.DictationService;
@@ -97,7 +98,14 @@ public class DictationModel {
      * Shut down speech and close up the model
      */
     public void close(){
-
+        if(this.alreadyPlayingService != null){
+            try{
+                this.alreadyPlayingService.close();
+            }
+            catch(Exception ex){
+                Log.e(DictationModel.class.getSimpleName(), "Failed to close", ex);
+            }
+        }
     }
 
     public int getMaxUtterances() {
