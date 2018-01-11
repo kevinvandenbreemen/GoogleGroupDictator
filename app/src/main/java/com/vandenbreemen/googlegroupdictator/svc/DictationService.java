@@ -102,6 +102,9 @@ public class DictationService implements Closeable, TextToSpeech.OnInitListener 
     }
 
     public void setCurrentPosition(int position){
+        if(this.textToSpeech.stop() == TextToSpeech.ERROR){
+            Log.w(DictationService.class.getSimpleName(), "Failed to stop TTS utterance");
+        }
         this.currentPosition.set(position);
     }
 
@@ -127,13 +130,13 @@ public class DictationService implements Closeable, TextToSpeech.OnInitListener 
                         try {
                             while (currentPosition.get() < toBeSpoken.size()) {
 
-                                int position = currentPosition.getAndIncrement();
-                                String toSpeak = toBeSpoken.get(position);
-
                                 while (textToSpeech.isSpeaking()) {
                                     Thread.sleep(100);
                                     //Log.d(DictationService.class.getSimpleName(), "Waiting for TTS availability or next utterance");
                                 }
+
+                                int position = currentPosition.getAndIncrement();
+                                String toSpeak = toBeSpoken.get(position);
 
                                 publishProgress(position);
                                 textToSpeech.speak(toSpeak, TextToSpeech.QUEUE_FLUSH, null, "GrpDict_"+position);
