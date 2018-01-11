@@ -52,6 +52,14 @@ public class DictationController implements DictationService.DictationCallback{
         }
     }
 
+    /**
+     * Update the current position of dictation
+     * @param position
+     */
+    public void setCurrentPosition(int position){
+        this.model.setPosition(position);
+    }
+
     @Override
     public void onStartUtterance(int position) {
         view.updatePosition(position);

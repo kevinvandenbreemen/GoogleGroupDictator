@@ -105,6 +105,14 @@ public class DictationModel {
     }
 
     /**
+     * Update the position of dictation to the given position
+     * @param position
+     */
+    public void setPosition(int position){
+        this.alreadyPlayingService.setCurrentPosition(position);
+    }
+
+    /**
      * Speak the post(s)
      * @param callback  Callback for various events
      */

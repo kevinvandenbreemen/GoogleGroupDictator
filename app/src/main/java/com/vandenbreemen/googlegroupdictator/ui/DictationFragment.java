@@ -67,6 +67,25 @@ public class DictationFragment extends Fragment implements DictationView{
         ui.findViewById(R.id.playButton).setOnClickListener(v -> controller.onPlay());
 
         this.seekBar = ui.findViewById(R.id.seekBar);
+        this.seekBar.setEnabled(false); //  Don't let the user use this until dictation has started
+        this.seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if(fromUser){
+                    controller.setCurrentPosition(progress);
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
 
         controller.setView(this);
         controller.start();
@@ -95,6 +114,7 @@ public class DictationFragment extends Fragment implements DictationView{
     @Override
     public void updatePosition(int position) {
         seekBar.setProgress(position);
+        this.seekBar.setEnabled(true);
     }
 
     @Override
