@@ -11,7 +11,6 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -70,34 +69,24 @@ public class DictationService implements Closeable, TextToSpeech.OnInitListener 
     private AtomicInteger currentPosition;
 
     /**
-     * Indicates TTS is initialized
-     */
-    private AtomicBoolean initialized;
-
-    /**
      * Define a new dictation service
      * @param context
      */
     public DictationService(Context context, DictationCallback callback) {
         this.context = context;
         this.dictationCallback = callback;
-        this.initialized = new AtomicBoolean(false);
 
-        this.textToSpeech = new TextToSpeech(context, this);
-        this.initialized.set(true);
     }
 
     @Override
     public void onInit(int status) {
-        System.out.println("INITIALIZED!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        new Throwable().printStackTrace();
         if(status == TextToSpeech.ERROR){
             Log.e(DictationService.class.getSimpleName(), "Error occurred initializing");
             dictationCallback.onError(new ApplicationError("Unexpected error occurred generating speech"));
+            dictationCallback.onDoneSpeaking();
         }
         else{
             textToSpeech.setLanguage(Locale.US);
-
             Log.i(DictationService.class.getSimpleName(), "TTS initialized");
         }
     }
@@ -121,53 +110,64 @@ public class DictationService implements Closeable, TextToSpeech.OnInitListener 
      */
     public void speak(){
 
-        AsyncTask<List<String>, Integer, Boolean> speechTask = new AsyncTask<List<String>, Integer, Boolean>() {
-            @Override
-            protected Boolean doInBackground(List<String>[] lists) {
-
-                List<String> toBeSpoken = lists[0];
-                currentPosition = new AtomicInteger(0);   //  Position of current utterance
-
-                try {
-                    while (currentPosition.get() < toBeSpoken.size()) {
-
-                        int position = currentPosition.get();
-                        String toSpeak = toBeSpoken.get(position);
-
-                        while (!initialized.get() || textToSpeech.isSpeaking()) {
-                            Thread.sleep(100);
-                            //Log.d(DictationService.class.getSimpleName(), "Waiting for TTS availability or next utterance");
-                        }
-
-                        publishProgress(position);
-                        textToSpeech.speak(toSpeak, TextToSpeech.QUEUE_FLUSH, null, "GrpDict_"+position);
-
-                    }
-                }catch(InterruptedException interrupted){
-                    Log.w(DictationService.class.getSimpleName(), "Interrupted while dictating", interrupted);
-                    return false;
-                }
-
-                return true;
-            }
-
-            @Override
-            protected void onProgressUpdate(Integer... values) {
-                int progressVal = values[0];
-                dictationCallback.onStartUtterance(progressVal);
-            }
-
-            @Override
-            protected void onPostExecute(Boolean aBoolean) {
-                if(!Boolean.TRUE.equals(aBoolean)){
-                    dictationCallback.onError(new ApplicationError("An unknown error occurred while dictating"));
-                    return;
-                }
+        this.textToSpeech = new TextToSpeech(context, status->{
+            if(status == TextToSpeech.ERROR){
+                Log.e(DictationService.class.getSimpleName(), "Failed to speak text");
+                dictationCallback.onError(new ApplicationError("Failed to speak the posts"));
                 dictationCallback.onDoneSpeaking();
             }
-        };
+            else{
+                AsyncTask<List<String>, Integer, Boolean> speechTask = new AsyncTask<List<String>, Integer, Boolean>() {
+                    @Override
+                    protected Boolean doInBackground(List<String>[] lists) {
 
-        speechTask.execute(this.utterances);
+                        List<String> toBeSpoken = lists[0];
+                        currentPosition = new AtomicInteger(0);   //  Position of current utterance
+
+                        try {
+                            while (currentPosition.get() < toBeSpoken.size()) {
+
+                                int position = currentPosition.getAndIncrement();
+                                String toSpeak = toBeSpoken.get(position);
+
+                                while (textToSpeech.isSpeaking()) {
+                                    Thread.sleep(100);
+                                    //Log.d(DictationService.class.getSimpleName(), "Waiting for TTS availability or next utterance");
+                                }
+
+                                publishProgress(position);
+                                textToSpeech.speak(toSpeak, TextToSpeech.QUEUE_FLUSH, null, "GrpDict_"+position);
+
+                            }
+                        }catch(InterruptedException interrupted){
+                            Log.w(DictationService.class.getSimpleName(), "Interrupted while dictating", interrupted);
+                            return false;
+                        }
+
+                        return true;
+                    }
+
+                    @Override
+                    protected void onProgressUpdate(Integer... values) {
+                        int progressVal = values[0];
+                        dictationCallback.onStartUtterance(progressVal);
+                    }
+
+                    @Override
+                    protected void onPostExecute(Boolean aBoolean) {
+                        if(!Boolean.TRUE.equals(aBoolean)){
+                            dictationCallback.onError(new ApplicationError("An unknown error occurred while dictating"));
+                            return;
+                        }
+                        dictationCallback.onDoneSpeaking();
+                    }
+                };
+
+                speechTask.execute(this.utterances);
+            }
+        });
+
+
 
     }
 
