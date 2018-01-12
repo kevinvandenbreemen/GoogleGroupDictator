@@ -20,9 +20,16 @@ android {
         targetCompatibility 1.8
         sourceCompatibility 1.8
     }
+
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
 }
 
 dependencies {
+    testImplementation "org.robolectric:robolectric:3.6.1"
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile 'com.android.support:support-annotations:24.0.0'
     androidTestCompile 'com.android.support.test:runner:0.5'
