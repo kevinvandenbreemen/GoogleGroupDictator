@@ -102,6 +102,9 @@ public class MainActivity extends AppCompatActivity implements ErrorMessageDispl
         }
     }
 
+    /**
+     * Refresh the posts feed
+     */
     private void refreshFeed() {
         this.feedController = new FeedController(
                 new FeedModel(configuration),
