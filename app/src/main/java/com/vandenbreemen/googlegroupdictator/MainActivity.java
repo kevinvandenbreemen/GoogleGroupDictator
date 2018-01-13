@@ -98,14 +98,18 @@ public class MainActivity extends AppCompatActivity implements ErrorMessageDispl
             showUIInset(new FeedConfigurationFragment().setController(new FeedConfigurationController(configuration)));
         }
         else{
-            this.feedController = new FeedController(
-                    new FeedModel(configuration),
-                    configuration,
-                    this
-            );
-            this.feedController = feedController;
-            this.feedController.start();
+            refreshFeed();
         }
+    }
+
+    private void refreshFeed() {
+        this.feedController = new FeedController(
+                new FeedModel(configuration),
+                configuration,
+                this
+        );
+        this.feedController = feedController;
+        this.feedController.start();
     }
 
     @Override
@@ -116,6 +120,7 @@ public class MainActivity extends AppCompatActivity implements ErrorMessageDispl
     @Override
     public void onFeedConfigCompleted(String groupName) {
         hideInset();
+        refreshFeed();
     }
 
     @Override
