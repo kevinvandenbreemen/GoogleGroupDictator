@@ -20,7 +20,7 @@ public class FeedConfigurationModelTest {
      * Name of group.  This test goes out on the internet and polls the group's RSS feed so this should be a
      * real Google group
      */
-    private static final String GROUP_NAME = "yt-ph";
+    public static final String GROUP_NAME = "yt-ph";
 
     @Test
     public void testConfigureGroup() throws Exception{
