@@ -2,6 +2,7 @@ package com.vandenbreemen.googlegroupdictator;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -23,6 +24,8 @@ import static junit.framework.TestCase.assertNotNull;
 import static junit.framework.TestCase.assertNotSame;
 import static junit.framework.TestCase.assertNull;
 import static junit.framework.TestCase.assertTrue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 /**
  * Created by kevin on 11/01/18.
@@ -43,6 +46,14 @@ public class MainActivityTest {
         assertNotNull("Fragment expected", frag);
         assertTrue("Feed configuration UI expected since feed is not set up",
                 frag instanceof FeedConfigurationFragment);
+    }
+
+    @Test
+    public void testNoProgressBarWhenPromptingForFeed(){
+        Activity activity = Robolectric.setupActivity(MainActivity.class);
+        assertThat("progress bar is not shown when user sets up feed config for first time",
+                activity.findViewById(R.id.progressBar).getVisibility(), is(View.GONE)
+                );
     }
 
     @Test

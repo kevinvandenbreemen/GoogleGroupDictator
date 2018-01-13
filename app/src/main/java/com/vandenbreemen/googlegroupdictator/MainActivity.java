@@ -87,6 +87,7 @@ public class MainActivity extends AppCompatActivity implements ErrorMessageDispl
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        hideLoadingAnimation();
 
         this.configuration = new FeedConfigurationModel(this);
 
