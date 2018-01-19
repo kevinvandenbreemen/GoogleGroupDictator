@@ -12,7 +12,10 @@ import java.io.FileInputStream;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicBoolean;
 
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertTrue;
 import static junit.framework.TestCase.assertFalse;
 
 /**
@@ -114,5 +117,25 @@ public class DictationModelTest {
                 ));
     }
 
+    @Test
+    public void testParseOutURLs(){
+        Post post = new TestPost(nbspPost);
+        DictationModel model = new DictationModel(Arrays.asList(post));
+
+        List<String> utterances = model.getUtterances();
+        AtomicBoolean found = new AtomicBoolean(false);
+        utterances.forEach(uterance->{
+            if(uterance.startsWith("this is a website")){
+                assertEquals("URL replace",
+                        "this is a website URL url expected Besides, Seven said in a log entry in \"Hope and Fear\" that Quantum Slipstream technology was similar to the transwarp drive used by the Borg",
+                        uterance
+                        );
+                found.set(true);
+            }
+        });
+
+        assertTrue("Should have encountered line", found.get());
+
+    }
 
 }

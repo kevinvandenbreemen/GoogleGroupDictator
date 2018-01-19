@@ -47,7 +47,8 @@ public class DictationModel {
             utterances.add(parseLine(post.getTitle()));
             utterances.add("Body");
 
-            String[] lines = post.getBody().split("[.!:]");
+            String body = cleanupText(post.getBody());
+            String[] lines = body.split("[.!:]");
             Arrays.stream(lines).forEach(line->{
                 if(!StringUtils.isBlank(line)){
                     String parsed = parseLine(line);
@@ -61,6 +62,15 @@ public class DictationModel {
         //  Prevent modification of the utterances now that they're set
         this.utterances = Collections.unmodifiableList(utterances);
 
+    }
+
+    /**
+     * Clear line of common junk like URLs or other things we don't care to dictate
+     * @param text
+     * @return
+     */
+    private String cleanupText(String text){
+        return text.replaceAll("http[s]*[:](//)[^ ]+", "URL");
     }
 
     /**
