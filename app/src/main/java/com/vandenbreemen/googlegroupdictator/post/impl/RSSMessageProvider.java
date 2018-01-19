@@ -88,7 +88,7 @@ public class RSSMessageProvider implements MessageProvider {
         String urlStr = item.getLink();
         String postBody = getPostBody(urlStr);
 
-        return new Post(postBody);
+        return new Post(item, postBody);
 
     }
 

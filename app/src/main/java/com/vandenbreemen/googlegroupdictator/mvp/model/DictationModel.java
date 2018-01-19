@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * <br/>Created by kevin on 07/01/18.
@@ -38,7 +39,14 @@ public class DictationModel {
     public DictationModel(List<Post> posts){
         this.utterances = new ArrayList<>();
 
+        AtomicInteger counter = new AtomicInteger(0);
+
         posts.forEach(post->{
+
+            utterances.add("Post number "+(counter.incrementAndGet()));
+            utterances.add(parseLine(post.getTitle()));
+            utterances.add("Body");
+
             String[] lines = post.getBody().split("[.!:]");
             Arrays.stream(lines).forEach(line->{
                 if(!StringUtils.isBlank(line)){

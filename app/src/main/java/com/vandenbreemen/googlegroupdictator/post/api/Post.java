@@ -6,9 +6,15 @@ package com.vandenbreemen.googlegroupdictator.post.api;
  */
 public class Post {
 
-    private String body;
+    /**
+     * Original RSS feed item
+     */
+    private final Item item;
 
-    public Post(String body) {
+    private final String body;
+
+    public Post(Item item, String body) {
+        this.item = item;
         this.body = body;
     }
 
@@ -18,5 +24,13 @@ public class Post {
      */
     public String getBody() {
         return body;
+    }
+
+    /**
+     * Get the title of the post
+     * @return
+     */
+    public String getTitle(){
+        return this.item.getTitle();
     }
 }

@@ -1,5 +1,6 @@
 package com.vandenbreemen.googlegroupdictator.mvp.model;
 
+import com.vandenbreemen.googlegroupdictator.post.api.Item;
 import com.vandenbreemen.googlegroupdictator.post.api.Post;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -19,9 +20,17 @@ import static junit.framework.TestCase.assertFalse;
  */
 public class DictationModelTest {
 
+    private static final Item testItem = new Item(
+            "Test Post",
+            "nolin",
+            "Post for unit Testing",
+            1123l,
+            ""
+    );
+
     private static class TestPost extends Post {
         public TestPost(String body) {
-            super(body);
+            super(testItem, body);
         }
     }
 
