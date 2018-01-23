@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">GoogleGroupDictator</string>
+    <string name="app_name">Google Groups Dictation App</string>
     <string name="feed_conf_title">Google Groups Feed Details</string>
     <string name="feed_conf_feed_name">Provide Google Group Name</string>
     <string name="feed_conf_feed_rwby">Group Name</string>
