@@ -1,5 +1,6 @@
 package com.vandenbreemen.googlegroupdictator;
 
+import android.animation.Animator;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -61,12 +62,31 @@ public class MainActivity extends AppCompatActivity implements ErrorMessageDispl
      */
     private void hideInset(){
         ((ViewGroup)findViewById(R.id.dialogInset))
-                .animate().translationXBy(-screenTranslationDistanceX).setDuration(400);
+                .animate().setListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
 
-        findViewById(R.id.settings).setEnabled(true);
-        findViewById(R.id.dictate).setEnabled(true);
+            }
 
-        getFragmentManager().beginTransaction().remove(currentFragment).commit();
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                getFragmentManager().beginTransaction().remove(currentFragment).commit();
+                findViewById(R.id.settings).setEnabled(true);
+                findViewById(R.id.dictate).setEnabled(true);
+                currentFragment = null;
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        }).translationXBy(-screenTranslationDistanceX).setDuration(400);
+
     }
 
     /**
@@ -74,11 +94,30 @@ public class MainActivity extends AppCompatActivity implements ErrorMessageDispl
      * @param fragment
      */
     private void showUIInset(Fragment fragment){
-        ((ViewGroup)findViewById(R.id.dialogInset)).animate().translationXBy(screenTranslationDistanceX).setDuration(400);
-        getFragmentManager().beginTransaction().add(R.id.dialogInset, fragment).commit();
+        ((ViewGroup)findViewById(R.id.dialogInset)).animate().setListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                getFragmentManager().beginTransaction().add(R.id.dialogInset, fragment).commit();
+                findViewById(R.id.settings).setEnabled(false);
+                findViewById(R.id.dictate).setEnabled(false);
+            }
 
-        findViewById(R.id.settings).setEnabled(false);
-        findViewById(R.id.dictate).setEnabled(false);
+            @Override
+            public void onAnimationEnd(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        }).translationXBy(screenTranslationDistanceX).setDuration(400);
+
         this.currentFragment = fragment;
 
     }
