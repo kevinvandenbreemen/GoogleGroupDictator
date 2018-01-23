@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -36,8 +37,14 @@ public class DictationModel {
      */
     private DictationService alreadyPlayingService;
 
+    /**
+     * Flag indicating model is already closed
+     */
+    private AtomicBoolean closed;
+
     public DictationModel(List<Post> posts){
         this.utterances = new ArrayList<>();
+        this.closed = new AtomicBoolean(false);
 
         AtomicInteger counter = new AtomicInteger(0);
 
@@ -124,6 +131,7 @@ public class DictationModel {
                 Log.e(DictationModel.class.getSimpleName(), "Failed to close", ex);
             }
         }
+        this.closed.set(true);
     }
 
     public int getMaxUtterances() {
@@ -152,5 +160,13 @@ public class DictationModel {
         service.setUtterances(this.utterances);
         service.speak();
         this.alreadyPlayingService = service;
+    }
+
+    /**
+     * Returns true if the model has already been closed
+     * @return
+     */
+    public boolean isClosed(){
+        return this.closed.get();
     }
 }

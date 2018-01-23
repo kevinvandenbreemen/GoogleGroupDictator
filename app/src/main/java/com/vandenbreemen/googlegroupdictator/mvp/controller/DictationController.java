@@ -35,8 +35,10 @@ public class DictationController implements DictationService.DictationCallback{
     }
 
     public void onClose() {
-        model.close();
-        view.onDone();
+        if(!model.isClosed()) {
+            model.close();
+            view.onDone();
+        }
     }
 
     public void onPause() {
@@ -72,6 +74,6 @@ public class DictationController implements DictationService.DictationCallback{
 
     @Override
     public void onDoneSpeaking() {
-        view.onDone();
+        onClose();
     }
 }
